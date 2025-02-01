@@ -167,7 +167,7 @@ VALUES   (
     'GM',
     'Hummer',
     '2016',
-    'Do you have 6 kids and like to go offroading? The Hummer gives you the small interiors with an engine to get you out of any muddy or rocky situation.',
+    'Do you have 6 kids and like to go offroading? The Hummer gives you small interiors with an engine to get you out of any muddy or rocky situation.',
     '/images/hummer.jpg',
     '/images/hummer-tn.jpg',
     58800,
@@ -231,4 +231,19 @@ VALUES   (
     'White',
     5
   );
+
+UPDATE
+inventory
+SET
+inv_description = REPLACE(inv_description, 'small interiors', 'a huge interior')
+WHERE
+inv_id = 10;
+
+UPDATE 
+inventory
+SET
+inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
+inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/imagas/vehicles/');
+
+
 
