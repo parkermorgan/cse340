@@ -37,11 +37,19 @@ nav {
 nav ul {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   padding: 1.5rem;
-  color:white;
   margin: 0 auto;
   text-align: center;
+}
+
+nav a {
+  text-decoration: none;
+  color:white;
+}
+
+nav a:hover {
+  text-decoration: underline;
 }
 
 .hero_section {
