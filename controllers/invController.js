@@ -19,4 +19,23 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build products page
+ * ************************** */
+
+invCont.buildById = async function (req, res, next) {
+  const inv_id = req.params.inv_id;
+  const data = await invModel.getProductById(inv_id);
+  const grid = await utilities.buildProductPage(data);
+  let nav = await utilities.getNav()
+  const year = data[0].inv_year;
+  const make = data[0].inv_make;
+  const model = data[0].inv_model;
+  res.render("./inventory/classification", {
+    title: year + " " + make + " " + model,
+    nav,
+    grid,
+  });
+};
+
 module.exports = invCont
