@@ -20,19 +20,23 @@ invCont.buildByClassificationId = async function (req, res, next) {
 }
 
 /* ***************************
- *  Build products page
+ *  Build individual product page
  * ************************** */
-
 invCont.buildById = async function (req, res, next) {
   const inv_id = req.params.inv_id;
   const data = await invModel.getProductById(inv_id);
+  
+  if (data.length === 0) {
+    res.status(404).render("error", { title: "Product Not Found", message: "The requested product could not be found." });
+    return;
+  }
+  
   const grid = await utilities.buildProductPage(data);
-  let nav = await utilities.getNav()
-  const year = data[0].inv_year;
-  const make = data[0].inv_make;
-  const model = data[0].inv_model;
-  res.render("./inventory/classification", {
-    title: year + " " + make + " " + model,
+  let nav = await utilities.getNav();
+  const { inv_year, inv_make, inv_model } = data[0];
+
+  res.render("./inventory/product", {
+    title: `${inv_year} ${inv_make} ${inv_model}`,
     nav,
     grid,
   });
