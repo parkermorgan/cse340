@@ -196,8 +196,8 @@ footer {
 }
 
 .error-display {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display:flex;
+  flex-direction: column;
   box-shadow: 2px 2px 8px black;
   background-color: rgb(215, 213, 213);
   padding: 10px;
@@ -212,8 +212,6 @@ footer {
 .error-card img {
   width: 100px;
   height: auto;
-  margin-left: -200px;
-  margin-top: 10px;
 }
 
 @media screen and (min-width: 769px) {
@@ -293,4 +291,13 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 
+  .error-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .error-card img {
+    margin-left: -200px;
+    margin-top: 10px;
+  }
 }
