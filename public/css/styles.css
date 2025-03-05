@@ -151,9 +151,9 @@ footer {
 }
 
 #inv-display li img {
-  height: 100px;
+  max-height: 90%;
   object-fit: cover;
-  width: 200px;
+  max-width: 90%;
   box-shadow: 2px 2px 8px black;
   margin: 1rem;
 }
