@@ -165,21 +165,57 @@ footer {
   box-sizing: border-box;
 }
 
+.product-img {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
 .product-img img {
   width: 100%;
   max-width: 100%;
   height: auto;
+  box-shadow: 2px 2px 8px black;
 }
 
 .product-info {
   padding: 10px;
-  text-align: center;
+  text-align: left;
+  line-height: 2.5;
+  font-size: 1.2em;
+  margin: 10px;
+  box-shadow: 2px 2px 8px black;
+  background-color: rgb(215, 213, 213);
+  padding: 10px;
+  border-radius: 3px;
 }
 
 .product-title {
   text-align: center;
   margin: 1em;
 }
+
+.error-display {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 2px 2px 8px black;
+  background-color: rgb(215, 213, 213);
+  padding: 10px;
+  border-radius: 3px;
+  margin: 1em;
+  font-size: 1.3em;
+  line-height: 2.5;
+  text-align: center;
+  width: 90%;
+}
+
+.error-card img {
+  width: 100px;
+  height: auto;
+  margin-left: -200px;
+  margin-top: 10px;
+}
+
 @media screen and (min-width: 769px) {
   body {
     background-image: url('/images/site/checkerboard.jpg');
@@ -256,4 +292,5 @@ footer {
   .product-grid {
     grid-template-columns: 1fr 1fr;
   }
+
 }

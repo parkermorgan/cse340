@@ -1,7 +1,9 @@
-<% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-      res.redirect('/')
-    } %>
-
-<%= message %>
+<div class="error-display">
+  <div class="error-card">
+    <h2><%- title %></h2>
+    <p><%- message %></p>
+  </div>
+  <div class="error-card">
+    <img src="../images/error/error-x.webp" alt="red x icon">
+  </div>
+</div>
