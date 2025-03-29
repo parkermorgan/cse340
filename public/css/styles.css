@@ -36,8 +36,9 @@ nav {
 
 nav ul {
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
+  justify-content: space-between; /* Spaces items across the nav */
+  align-items: center;
   padding: 1.5rem;
   margin: 0 auto;
   text-align: center;
@@ -69,7 +70,7 @@ nav a:hover {
   left: 0%;
   top: 35%;
   background-color: rgba(255, 255, 255, 0.8);
-  color: #4C96D7;
+  color: #007bff;
   width: 35%;
   padding: 5px;
 }
@@ -115,7 +116,7 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #4C96D7;
+  background-color: #007bff;
   padding: 20px;
   border: 3px solid black;
   text-align: center;
@@ -218,7 +219,7 @@ footer {
 
 /* General form styling */
 .display {
-  width: 350px;
+  width: 500px;
   margin: 50px auto;
   padding: 20px;
   background: #f8f9fa;
@@ -300,6 +301,19 @@ footer {
 
 .display a:hover {
   text-decoration: underline;
+}
+
+.description {
+  width: 100%; /* Make it take full width */
+  display: block; /* Ensure it's on a new line */
+  margin-bottom: 5px; /* Add some space before the instruction */
+}
+
+.description + .fine-print {
+  display: block; /* Moves the fine-print (instructions) below the text area */
+  text-align: left; /* Align it to the left */
+  font-size: 0.9em; /* Slightly smaller text */
+  color: #666; /* Grey text */
 }
 
 #messages li{
