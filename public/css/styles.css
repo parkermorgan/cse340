@@ -70,7 +70,7 @@ nav a:hover {
   left: 0%;
   top: 35%;
   background-color: rgba(255, 255, 255, 0.8);
-  color: #007bff;
+  color: #0164cd;
   width: 35%;
   padding: 5px;
 }
@@ -116,7 +116,7 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #007bff;
+  background-color: #0164cd;
   padding: 20px;
   border: 3px solid black;
   text-align: center;
@@ -274,7 +274,7 @@ footer {
   padding: 10px;
   font-size: 16px;
   color: white;
-  background: #007bff;
+  background: #0164cd;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -282,7 +282,7 @@ footer {
 }
 
 #btn:hover {
-  background: #0056b3;
+  background: #004794;
 }
 
 /* Sign-up text */
@@ -294,7 +294,7 @@ footer {
 
 /* Sign-up link */
 .display a {
-  color: #007bff;
+  color: #0164cd;
   text-decoration: none;
   font-weight: bold;
 }
@@ -346,7 +346,7 @@ footer {
   width: 100%; 
   font-size: 16px;
   color: white;
-  background: #007bff;
+  background: #0164cd;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -355,7 +355,7 @@ footer {
 }
 
 .btn-link:hover {
-  background: #0056b3;
+  background: #004794;
 }
 
 .title {
