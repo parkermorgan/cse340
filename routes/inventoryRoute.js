@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     res.render("inventory/management", { 
         title: "Inventory Home", 
         nav,
-        errors: null // Ensures errors is always defined
+        errors: null 
     });
 });
 

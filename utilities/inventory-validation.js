@@ -44,81 +44,67 @@ validate.checkClassificationData = async (req, res, next) => {
  * ********************************* */
 validate.inventoryRules = () => {
   return [
-    // Make is required and must be string
+
+    body("classification_id")
+    .trim()
+    .escape()
+    .isInt()
+    .withMessage("Please provide a classification."),
+
     body("inv_make")
       .trim()
       .escape()
-      .notEmpty()
-      .withMessage("Make value is missing")
       .isLength({ min: 1 })
       .withMessage("Please provide a make."), // on error this message is sent.
 
     body("inv_model")
       .trim()
       .escape()
-      .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide a model."),
 
     body("inv_year")
       .trim()
       .escape()
-      .notEmpty()
-      .withMessage("Year value missing.")
       .isNumeric()
       .withMessage("Year must be a number."),
 
     body("inv_description")
       .trim()
       .escape()
-      .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide a description."),
 
     body("inv_image")
       .trim()
       .escape()
-      .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide an image."),
 
     body("inv_thumbnail")
       .trim()
       .escape()
-      .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide a thumbnail."),
 
     body("inv_price")
       .trim()
       .escape()
-      .notEmpty()
-      .withMessage("Price value is missing.")
       .isNumeric()
       .withMessage("Price must be a number."),
 
     body("inv_miles")
       .trim()
       .escape()
-      .notEmpty()
-      .withMessage("Miles value is missing.")
       .isNumeric()
       .withMessage("Miles must be a number."),
 
     body("inv_color")
       .trim()
       .escape()
-      .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide a color."),
 
-    body("classification_id")
-      .trim()
-      .escape()
-      .notEmpty()
-      .isLength({ min: 1 })
-      .isInt()
-      .withMessage("Please provide a make."),
   ];
 };
 

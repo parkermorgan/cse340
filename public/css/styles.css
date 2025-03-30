@@ -324,6 +324,7 @@ footer {
   list-style: none;
   color: red;
   text-align: left;
+  margin: 20px;
 }
 
 .inv_list {
