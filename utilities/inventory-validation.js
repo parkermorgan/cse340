@@ -12,8 +12,8 @@ validate.classificationRules = () => {
     body("classification_name")
       .trim()
       .escape()
-      .notEmpty()
       .isAlphanumeric()
+      .withMessage(" ")
       .isLength({ min: 1 })
       .withMessage("Please provide a valid classification name."), // on error this message is sent.
   ];

@@ -326,6 +326,41 @@ footer {
   text-align: left;
 }
 
+.inv_list {
+  margin: 20px;
+  list-style: none;
+  line-height: 3;
+  padding: 0;
+  width: 225px
+}
+
+.inv_list li {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.inv_list .btn-link {
+  display: block; 
+  text-align: center; 
+  width: 100%; 
+  font-size: 16px;
+  color: white;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  background: #0056b3;
+}
+
+.title {
+  margin-left: 20px;
+}
+
 @media screen and (min-width: 769px) {
   body {
     background-image: url('/images/site/checkerboard.jpg');

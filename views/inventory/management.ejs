@@ -1,19 +1,23 @@
-<h1><%- title %></h1>
-<%- messages() %>
+<div class="management">
 
-<% if (errors && errors.array().length > 0) { %>
-    <ul class="notice">
-       <% errors.array().forEach(error => { %>
-         <li><%= error.msg %></li>
-       <% }) %>
+    <h1 class="title"><%- title %></h1>
+    <%- messages() %>
+
+    <% if (errors && errors.array().length > 0) { %>
+        <ul class="notice">
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+        </ul>
+    <% } %>
+
+    <ul class="inv_list">
+        <li>
+            <a class="btn-link" href="/inv/add-classification">Add New Classification</a>
+        </li>
+        <li>
+            <a class="btn-link" href="/inv/add-inventory">Add New Vehicle</a>
+        </li>
     </ul>
-<% } %>
 
-<ul>
-    <li>
-        <a href="/inv/add-classification">Add New Classification</a>
-    </li>
-    <li>
-        <a href="/inv/add-inventory">Add New Vehicle</a>
-    </li>
-</ul>
+</div>
