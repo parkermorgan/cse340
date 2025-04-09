@@ -7,22 +7,30 @@ const regValidate = require('../utilities/account-validation')
 
 // Deliver login view
 
+// Default account management view
+router.get("/", 
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountManagement)
+)
+
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
 
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 router.post(
     "/register",
-    regValidate.registationRules(),
+    regValidate.registrationRules(),
     regValidate.checkRegData, 
     utilities.handleErrors(accountController.registerAccount)
   )
 
-router.post(
-  "/login",
-  regValidate.loginRules(),
-  regValidate.checkLogData,
-  utilities.handleErrors(accountController.registerAccount)
-)
+  router.post(
+    "/login",
+    regValidate.loginValidation,
+    regValidate.checkLogData,
+    utilities.handleErrors(accountController.accountLogin)
+  )
+
+
 
 module.exports = router;
