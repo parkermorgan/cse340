@@ -362,6 +362,80 @@ footer {
   margin-left: 20px;
 }
 
+/* Table styling */
+#inventoryDisplay {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#inventoryDisplay th, #inventoryDisplay td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+#inventoryDisplay th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Alternating row colors for readability */
+#inventoryDisplay tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#inventoryDisplay tbody tr:hover {
+  background-color: #eaeaea;
+}
+
+/* Link styles */
+#inventoryDisplay a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+#inventoryDisplay a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+#inventoryDisplay td a {
+  margin-right: 10px;
+}
+
+/* Add some space between the action buttons */
+#inventoryDisplay td {
+  text-align: center;
+}
+
+.manage_inventory {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;  /* Ensures the header is aligned to the left */
+  margin-left: 20px;
+}
+
+/* Styling for the 'Please select a classification' paragraph */
+.selectClassification {
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: left;  /* Aligning the paragraph to the left */
+  margin-left: 20px;
+}
+
+#delete {
+  background-color: red;
+  color:white;
+}
+
+#delete-p {
+  color:red;
+  font-weight: bold;
+}
+
+
 @media screen and (min-width: 769px) {
   body {
     background-image: url('/images/site/checkerboard.jpg');

@@ -18,13 +18,16 @@ router.post("/add-classification", invValidate.classificationRules(), invValidat
 router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
 router.post("/add-inventory", invValidate.inventoryRules(), invValidate.checkInventoryData, utilities.handleErrors(invController.addInventory));
 
-router.get("/", async (req, res) => {
-    let nav = await utilities.getNav();
-    res.render("inventory/management", { 
-        title: "Inventory Home", 
-        nav,
-        errors: null 
-    });
-});
+router.get("/", utilities.handleErrors(invController.buildManagementView));
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+// Route to edit inventory item
+router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+
+router.get("/delete/:inventoryId", utilities.handleErrors(invController.buildDeleteInventory));
+router.post("/delete/", utilities.handleErrors(invController.deleteInventory));  
+
+router.post("/update", invValidate.inventoryRules(), invValidate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
+
 
 module.exports = router;
