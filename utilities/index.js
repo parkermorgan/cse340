@@ -137,6 +137,24 @@ Util.checkJWTToken = (req, res, next) => {
  }
 }
 
+Util.updateCookie = (accountData, res) => {
+  const accessToken = jwt.sign(
+    accountData,
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: 3600 }
+  );
+  if (process.env.NODE_ENV === "development") {
+    res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+  } else {
+    res.cookie("jwt", accessToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600 * 1000,
+    });
+  }
+}
+
+
 /* ****************************************
  *  Check Login
  * ************************************ */
@@ -148,6 +166,37 @@ Util.checkLogin = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
+
+ /* ****************************************
+ *  Check authorization
+ * ************************************ */
+Util.checkAuthorizationManager = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          req.flash("Please log in");
+          res.clearCookie("jwt");
+          return res.redirect("/account/login");
+        }
+        if(accountData.account_type == "Employee" || accountData.account_type == "Admin") {
+          next();
+        }
+        else {
+          console.log("GET OUT OF HERE!!!")
+          req.flash("notice", "You are not authorized to modify inventory.");
+          return res.redirect("/account/login");
+        }
+      }
+    );
+  } else {
+    console.log("NO TOKEN!!!")
+    req.flash("notice", "You are not authorized to modify inventory.");
+    return res.redirect("/account/login");
+  }
+}
  
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 

@@ -5,8 +5,12 @@ const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inventory-validation");
 const utilities = require("../utilities")
 
+// Route middleware
+router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkLogin);
+router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkAuthorizationManager);
+
 // Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+router.get("/type/:classification_id", invController.buildByClassificationId);
 router.get("/detail/:inv_id", utilities.handleErrors(invController.buildById));
 router.get("/cause-error", utilities.handleErrors(invController.causeError));
 
@@ -26,5 +30,17 @@ router.get("/", async (req, res) => {
         errors: null 
     });
 });
+
+// Build edit/update inventory views
+router.get("/edit/:inventoryId", utilities.handleErrors(invController.buildEditInventory));
+router.post("/update/", invValidate.inventoryRules(), invValidate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
+
+// Delete vehicle information routes
+router.get("/delete/:inventoryId", utilities.handleErrors(invController.buildDeleteInventory));
+router.post("/delete/", utilities.handleErrors(invController.deleteInventory));  // Don't need validation
+
+// AJAX inventory api call route
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
 
 module.exports = router;

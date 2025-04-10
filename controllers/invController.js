@@ -5,9 +5,9 @@ const invCont = {}
 
 /* ***************************
  *  Build inventory by classification view
- * ************************** */
+ * ************************* */
 invCont.buildByClassificationId = async function (req, res, next) {
-  const classification_id = req.params.classificationId
+  const classification_id = req.params.classification_id
   const data = await invModel.getInventoryByClassificationId(classification_id)
   const grid = await utilities.buildClassificationGrid(data)
   let nav = await utilities.getNav()
@@ -17,7 +17,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     nav,
     grid,
   })
-}
+};
 
 /* ***************************
  *  Build individual product page
@@ -164,6 +164,181 @@ invCont.addInventory = async function (req, res, next) {
   }
 };
 
+/**
+ * Build the edit inventory view
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+invCont.buildEditInventory = async function (req, res, next) {
+  const inventory_id = parseInt(req.params.inventoryId);
+  const nav = await utilities.getNav();
+
+  const inventoryData = (
+    await invModel.getInventoryByInventoryId(inventory_id))[0]; // Change this function to return the first item
+  const name = `${inventoryData.inv_make} ${inventoryData.inv_model}`;
+
+  let classifications = await utilities.buildClassificationList(inventoryData.classification_id);
+
+  res.render("inventory/editInventory", {
+    title: "Edit " + name,
+    errors: null,
+    nav,
+    classifications,
+    inv_id: inventoryData.inv_id,
+    inv_make: inventoryData.inv_make,
+    inv_model: inventoryData.inv_model,
+    inv_year: inventoryData.inv_year,
+    inv_description: inventoryData.inv_description,
+    inv_image: inventoryData.inv_image,
+    inv_thumbnail: inventoryData.inv_thumbnail,
+    inv_price: inventoryData.inv_price,
+    inv_miles: inventoryData.inv_miles,
+    inv_color: inventoryData.inv_color,
+    classification_id: inventoryData.classification_id,
+  });
+};
+
+/**
+ * Handle post request to update a vehicle to the inventory along with redirects
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+invCont.updateInventory = async function (req, res, next) {
+  const nav = await utilities.getNav();
+
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body;
+
+  const response = await invModel.updateInventory(
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id
+  );
+
+  if (response) {
+    const itemName = response.inv_make + " " + response.inv_model;
+    req.flash("notice", `The ${itemName} was successfully updated.`);
+    res.redirect("/inv/");
+  } else {
+    const classifications = await utilities.buildClassificationList(
+      classification_id
+    );
+    const itemName = `${inv_make} ${inv_model}`;
+    req.flash("notice", "Sorry, the update failed.");
+    res.status(501).render("inventory/editInventory", {
+      title: "Edit " + itemName,
+      nav,
+      errors: null,
+      classifications,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+    });
+  }
+};
+
+/**
+ * Build the delete inventory view
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+invCont.buildDeleteInventory = async function (req, res, next) {
+  const inventory_id = parseInt(req.params.inventoryId);
+  const nav = await utilities.getNav();
+
+  const inventoryData = (
+    await invModel.getInventoryByInventoryId(inventory_id))[0]; // Change this function to return the first item
+  const name = `${inventoryData.inv_make} ${inventoryData.inv_model}`;
+
+  res.render("inventory/delete-confirm", {
+    title: "Delete " + name,
+    errors: null,
+    nav,
+    inv_id: inventoryData.inv_id,
+    inv_make: inventoryData.inv_make,
+    inv_model: inventoryData.inv_model,
+    inv_year: inventoryData.inv_year,
+    inv_price: inventoryData.inv_price,
+  });
+};
+
+
+
+
+/**
+ * Handle post request to delete a vehicle from the inventory along with redirects
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+invCont.deleteInventory = async function (req, res, next) {
+  const nav = await utilities.getNav();
+  const inventory_id = parseInt(req.body.inv_id);
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_price,
+  } = req.body;
+
+  const queryResponse = await invModel.deleteInventory(inventory_id);
+  const itemName = `${inv_make} ${inv_model}`;
+
+  if (queryResponse) {
+    // const itemName = queryResponse.inv_make + " " + queryResponse.inv_model;
+    req.flash("notice", `The ${itemName} was successfully deleted.`);
+    res.redirect("/inv/");
+  } else {
+    // const classifications = await utilities.buildClassificationList(
+    //   classification_id
+    // );
+
+    req.flash("notice", "Sorry, the update failed.");
+    res.status(501).render("inventory/deleteInventory", {
+      title: "Delete " + itemName,
+      nav,
+      errors: null,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_price,
+    });
+  }
+};
+
+
 const errorController = {};
 
 errorController.causeError = async function(req, res, next) {
@@ -171,6 +346,8 @@ errorController.causeError = async function(req, res, next) {
     throw new Error("This is an intentional error!");
 };
 
-module.exports = errorController;
 
-module.exports = invCont
+module.exports = {
+  invCont,
+  errorController,
+};
