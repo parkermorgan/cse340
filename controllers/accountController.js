@@ -135,4 +135,129 @@ async function accountLogin(req, res) {
     throw new Error('Access Forbidden')
   }
 }
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement } 
+
+/* ****************************************
+ * Build Account Update View
+ **************************************** */
+async function buildAccountUpdate(req, res, next) {
+  let nav = await utilities.getNav()
+  const accountFirstname = res.locals.accountData.account_firstname
+  const accountLastname = res.locals.accountData.account_lastname
+  const accountEmail = res.locals.accountData.account_email
+
+  res.render("account/update", {
+    title: "Update Account",
+    nav,
+    accountFirstname,
+    accountLastname,
+    accountEmail,
+  })
+}
+
+/* ****************************************
+ * Update Account Info
+ **************************************** */
+async function updateAccountInfo(req, res, next) {
+  const { account_firstname, account_lastname, account_email } = req.body
+  let nav = await utilities.getNav()
+
+  try {
+    const updateResult = await accountModel.updateAccountInfo(
+      res.locals.accountData.account_email, 
+      account_firstname, 
+      account_lastname, 
+      account_email
+    )
+
+    if (updateResult) {
+      req.flash("notice", "Your account information has been updated successfully.")
+      res.redirect("/account/")
+    } else {
+      req.flash("notice", "There was an error updating your account.")
+      res.status(500).render("account/update", {
+        title: "Update Account",
+        nav,
+        account_firstname,
+        account_lastname,
+        account_email,
+      })
+    }
+  } catch (error) {
+    req.flash("notice", "An error occurred while updating your account.")
+    res.status(500).render("account/update", {
+      title: "Update Account",
+      nav,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+  }
+}
+
+/* ****************************************
+ * Build Change Password View
+ **************************************** */
+async function buildChangePassword(req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("account/change-password", {
+    title: "Change Password",
+    nav,
+  })
+}
+
+/* ****************************************
+ * Change Password
+ **************************************** */
+async function changePassword(req, res, next) {
+  const { current_password, new_password, confirm_password } = req.body
+  let nav = await utilities.getNav()
+
+  // Check if new passwords match
+  if (new_password !== confirm_password) {
+    req.flash("notice", "New passwords do not match.")
+    return res.status(400).render("account/change-password", {
+      title: "Change Password",
+      nav,
+    })
+  }
+
+  const accountData = res.locals.accountData;
+
+  console.log("accountData:", accountData);  // Log the account data to check its contents
+  try {
+    // Check current password
+    if (await bcrypt.compare(current_password, accountData.account_password)) {
+      const hashedNewPassword = await bcrypt.hash(new_password, 10)
+      
+      const updateResult = await accountModel.updatePassword(accountData.account_email, hashedNewPassword)
+
+      if (updateResult) {
+        req.flash("notice", "Your password has been updated successfully.")
+        res.redirect("/account/")
+      } else {
+        req.flash("notice", "Error updating your password.")
+        res.status(500).render("account/change-password", {
+          title: "Change Password",
+          nav,
+        })
+      }
+    } else {
+      req.flash("notice", "Current password is incorrect.")
+      res.status(400).render("account/change-password", {
+        title: "Change Password",
+        nav,
+      })
+    }
+  } catch (error) {
+    console.error("Error changing password:", error);  // Log the error to see its details
+    req.flash("notice", "An error occurred while changing your password.");
+    res.status(500).render("account/change-password", {
+      title: "Change Password",
+      nav,
+    });
+  }
+  
+}
+
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, buildChangePassword, changePassword, updateAccountInfo, buildAccountUpdate } 

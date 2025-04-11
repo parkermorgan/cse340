@@ -1,6 +1,24 @@
 
-<% if (title) { %>
-    <h1 class="title"><%= title %></h1>
-<% } else { res.redirect('/')} %>
-<%- messages() %>
+<div class="display">
+    <% if (title) { %>
+        <h1 class="title"><%= title %></h1>
+    <% } else { res.redirect('/')} %>
 
+    <%- messages() %>
+
+    <div class="account-details">
+        <h2>Account Information</h2>
+        <p><strong>First Name:</strong> <%= locals.accountData.account_firstname %></p>
+        <p><strong>Last Name:</strong> <%= locals.accountData.account_lastname %></p>
+        <p><strong>Email Address:</strong> <%= locals.accountData.account_email %></p>
+    </div>
+
+    <div class="account-actions">
+        <h3>What would you like to do?</h3>
+        <ul>
+            <li><a href="/account/update">Update Account Information</a></li>
+            <li><a href="/account/change-password">Change Password</a></li>
+            <li><a href="/account/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>

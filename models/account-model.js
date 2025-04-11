@@ -33,20 +33,52 @@ async function checkExistingEmail(account_email){
 /* *****************************
 * Return account data using email address
 * ***************************** */
-async function getAccountByEmail (account_email) {
+async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
       'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
-      [account_email])
+      [account_email]
+    )
     return result.rows[0]
   } catch (error) {
-    return new Error("No matching email found")
+    throw new Error("No matching email found")  
   }
 }
 
-// Export the function
+/// Update account info (name and email)
+async function updateAccountInfo(account_email, account_firstname, account_lastname, new_account_email) {
+  try {
+    const sql = `
+      UPDATE account
+      SET account_firstname = $1, account_lastname = $2, account_email = $3
+      WHERE account_email = $4
+      RETURNING *`
+    return await pool.query(sql, [account_firstname, account_lastname, new_account_email, account_email])
+  } catch (error) {
+    console.error(error.message)
+    return null
+  }
+}
+
+// Update password
+async function updatePassword(account_email, new_password) {
+  try {
+    const sql = `
+      UPDATE account
+      SET account_password = $1
+      WHERE account_email = $2
+      RETURNING *`
+    return await pool.query(sql, [new_password, account_email])
+  } catch (error) {
+    console.error(error.message)
+    return null
+  }
+}
+
 module.exports = {
-    registerAccount,
-    checkExistingEmail,
-    getAccountByEmail
+  registerAccount,
+  checkExistingEmail,
+  getAccountByEmail,
+  updateAccountInfo,
+  updatePassword
 }
