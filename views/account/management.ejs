@@ -1,24 +1,38 @@
-
 <div class="display">
     <% if (title) { %>
-        <h1 class="title"><%= title %></h1>
-    <% } else { res.redirect('/')} %>
-
+      <h1 class="title"><%= title %></h1>
+    <% } else { res.redirect('/') } %>
+  
     <%- messages() %>
-
+  
+    <!-- Greet the user -->
+    <h2>Welcome <%= accountFirstname %></h2>
+  
+    <!-- Account Details -->
     <div class="account-details">
-        <h2>Account Information</h2>
-        <p><strong>First Name:</strong> <%= locals.accountData.account_firstname %></p>
-        <p><strong>Last Name:</strong> <%= locals.accountData.account_lastname %></p>
-        <p><strong>Email Address:</strong> <%= locals.accountData.account_email %></p>
+      <h2>Account Information</h2>
+      <p><strong>First Name:</strong> <%= accountFirstname %></p>
+      <p><strong>Last Name:</strong> <%= accountLastname %></p>
+      <p><strong>Email Address:</strong> <%= accountEmail %></p>
     </div>
-
+  
+    <!-- Show Inventory Management if Admin or Employee -->
+    <% if (accountType === 'Employee' || accountType === 'Admin') { %>
+      <div class="inventory-section">
+        <h3>Inventory Management</h3>
+        <p>
+          <a href="/inv">Access Inventory Management</a>
+        </p>
+      </div>
+    <% } %>
+  
+    <!-- General Actions -->
     <div class="account-actions">
-        <h3>What would you like to do?</h3>
-        <ul>
-            <li><a href="/account/update">Update Account Information</a></li>
-            <li><a href="/account/change-password">Change Password</a></li>
-            <li><a href="/account/logout">Logout</a></li>
-        </ul>
+      <h3>What would you like to do?</h3>
+      <ul>
+        <li><a href="/account/update">Update Account Information</a></li>
+        <li><a href="/account/change-password">Change Password</a></li>
+        <li><a href="/account/logout">Logout</a></li>
+      </ul>
     </div>
-</div>
+  </div>

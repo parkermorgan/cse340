@@ -32,16 +32,17 @@ async function buildRegister(req, res, next) {
  * *************************** */
 async function buildAccountManagement(req, res) {
   let nav = await utilities.getNav()
-  const accountFirstname = res.locals.accountData.account_firstname
-  const accountLastname = res.locals.accountData.account_lastname
   const accountEmail = res.locals.accountData.account_email
+  const updatedAccountData = await accountModel.getAccountByEmail(accountEmail)
 
   res.render("account/management", {
     title: "Account Management",
     nav,
-    accountFirstname,
-    accountLastname,
-    accountEmail,
+    accountFirstname: updatedAccountData.account_firstname,
+    accountLastname: updatedAccountData.account_lastname,
+    accountEmail: updatedAccountData.account_email,
+    accountId: updatedAccountData.account_id,
+    accountType: updatedAccountData.account_type
   })
 }
 
@@ -170,6 +171,20 @@ async function updateAccountInfo(req, res, next) {
     )
 
     if (updateResult) {
+
+      const updatedAccount = await accountModel.getAccountByEmail(account_email)
+      delete updatedAccount.account_password
+
+   
+      const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+
+  
+      if (process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      }
+
       req.flash("notice", "Your account information has been updated successfully.")
       res.redirect("/account/")
     } else {
@@ -221,7 +236,8 @@ async function changePassword(req, res, next) {
     })
   }
 
-  const accountData = res.locals.accountData;
+  const email = res.locals.accountData.account_email;
+  const accountData = await accountModel.getAccountByEmail(email);
 
   console.log("accountData:", accountData);  // Log the account data to check its contents
   try {
@@ -259,5 +275,11 @@ async function changePassword(req, res, next) {
   
 }
 
+function logoutAccount(req, res) {
+  res.clearCookie("jwt") // Clear the JWT cookie
+  req.flash("notice", "You have been logged out.")
+  res.redirect("/") // Or redirect to /account/login or wherever you want
+}
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, buildChangePassword, changePassword, updateAccountInfo, buildAccountUpdate } 
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, buildChangePassword, changePassword, updateAccountInfo, buildAccountUpdate, logoutAccount } 
